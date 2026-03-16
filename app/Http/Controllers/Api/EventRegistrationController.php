@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Concerns\VerifiesRecaptcha;
 use App\Mail\EventRegistrationConfirmation;
 use App\Models\Event;
 use App\Models\EventRegistration;
@@ -14,6 +15,7 @@ use Illuminate\Support\Str;
 
 class EventRegistrationController extends Controller
 {
+    use VerifiesRecaptcha;
     /**
      * Register (or guest-register) to an event.
      * If the user is authenticated, link the registration to their account.
@@ -21,6 +23,8 @@ class EventRegistrationController extends Controller
     public function store(Request $request, string $slug): JsonResponse
     {
         $event = Event::where('slug', $slug)->where('status', 'published')->firstOrFail();
+
+        $this->checkBotProtection($request);
 
         $validated = $request->validate([
             'first_name'        => 'required|string|max:255',

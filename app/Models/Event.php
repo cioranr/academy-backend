@@ -13,6 +13,7 @@ class Event extends Model
         'time_start', 'time_end', 'location', 'venue',
         'credits', 'credits_label', 'image', 'image_small', 'image_big', 'status',
         'max_participants', 'created_by',
+        'meta_title', 'meta_description', 'schema_org',
     ];
 
     protected $casts = [

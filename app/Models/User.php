@@ -1,5 +1,6 @@
 <?php
 namespace App\Models;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,6 +13,13 @@ class User extends Authenticatable {
     protected $hidden = ['password','remember_token'];
     protected function casts(): array {
         return ['email_verified_at' => 'datetime', 'password' => 'hashed'];
+    }
+    public function sendPasswordResetNotification($token): void
+    {
+        $url = rtrim(env('FRONTEND_URL', 'http://localhost:3000'), '/')
+            . '/reset-password?token=' . $token
+            . '&email=' . urlencode($this->email);
+        $this->notify(new ResetPasswordNotification($url));
     }
     public function isAdmin(): bool { return $this->role === 'admin'; }
     public function isEventsManager(): bool { return in_array($this->role, ['admin','events_manager']); }

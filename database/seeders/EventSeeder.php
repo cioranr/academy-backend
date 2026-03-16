@@ -12,16 +12,16 @@ class EventSeeder extends Seeder
     public function run(): void
     {
         $event = Event::create([
-            'title'         => 'Workshop Interactiv TAVI',
-            'subtitle'      => 'Abordare avansată și optimizarea rezultatelor, de la anatomie la implantare',
+            'title'         => 'TAVI',
+            'subtitle'      => "Abordare avansată și optimizarea rezultatelor, \nde la anatomie la implantare",
             'description'   => "Vă invităm să participați la Workshopul Interactiv TAVI Edwards™, organizat în cadrul Monza ARES în data de 31 octombrie 2025, un eveniment dedicat medicilor interesați de abordarea avansată a cazurilor TAVI și optimizarea rezultatelor clinice în anatomii provocatoare.\n\nAcest workshop este construit ca un format intensiv, orientat spre practică, care îmbină analiza decizională, transmiterea de cazuri live, discuții interactive și simulări hands-on cu focus pe precizie, timing și anatomii dificile – așa cum le întâlnim în practica reală.",
-            'slug'          => 'workshop-interactiv-tavi',
-            'date'          => '2025-10-31',
-            'time_start'    => '08:30',
-            'time_end'      => '18:00',
+            'slug'          => 'tavi',
+            'date'          => '2026-10-31',
+            'time_start'    => '10:00',
+            'time_end'      => '16:00',
             'location'      => 'Centrul de Training',
             'venue'         => 'Spitalul Monza',
-            'credits'       => 6,
+            'credits'       => 8,
             'credits_label' => 'CURS CREDITAT CU 6 PUNCTE EMC',
             'status'        => 'published',
             'max_participants' => 50,
@@ -30,10 +30,9 @@ class EventSeeder extends Seeder
 
         // Speakers
         $speakers = [
-            ['name' => 'Dr. Theodor Cebotaru', 'specialty' => 'Medic primar Chirurgie Cardiovasculară', 'image' => '/Dr_Theodor_Cebotaru.webp', 'slug' => 'dr-theodor-cebotaru', 'speaker_role' => 'director', 'order' => 0],
-            ['name' => 'Dr. Stanislav Rurac',  'specialty' => 'Medic primar Chirurgie cardiovasculară', 'image' => '/dr-2.jpg', 'slug' => 'dr-stanislav-rurac', 'speaker_role' => 'director', 'order' => 1],
-            ['name' => 'Dr. Călin Popa',       'specialty' => "Medic primar Chirurgie cardiovasculară\nChirurgie vasculară", 'image' => '/dr-3.jpg', 'slug' => 'dr-calin-popa', 'speaker_role' => 'speaker', 'order' => 2],
-            ['name' => 'Dr. Andrei Eni',       'specialty' => 'Chirurgie vasculară', 'image' => '/dr-4.jpg', 'slug' => 'dr-andrei-eni', 'speaker_role' => 'speaker', 'order' => 3],
+            ['name' => 'Dr. Theodor Cebotaru', 'specialty' => 'Medic primar Chirurgie Cardiovasculară', 'image' => '/Dr_Theodor_Cebotaru.webp', 'slug' => 'dr-theodor-cebotaru', 'speaker_role' => 'speaker', 'order' => 0],
+            ['name' => 'Dr. Stanislav Rurac',  'specialty' => 'Medic primar Chirurgie cardiovasculară', 'image' => '/dr-2.jpg', 'slug' => 'dr-stanislav-rurac', 'speaker_role' => 'speaker', 'order' => 1],
+            ['name' => 'Dr. Călin Popa',       'specialty' => 'Medic primar Chirurgie cardiovasculară Chirurgie vasculară', 'image' => '/dr-3.jpg', 'slug' => 'dr-calin-popa', 'speaker_role' => 'speaker', 'order' => 2],
         ];
 
         foreach ($speakers as $s) {
@@ -54,7 +53,7 @@ class EventSeeder extends Seeder
                 'CAZ TAVI 1 LIVE',
                 'ANALIZĂ COMENTATĂ A CAZULUI. TRANSMISIE LIVE. Q&A',
                 'ATELIER HANDS-ON I – SIMULARE TAVI STEP-BY-STEP – CU FOCUS PE ROLE-PLAY DECIZIONAL',
-                'TAVI ÎN BICUSPIDIA AORTICĂ',
+                'TAVI ÎN BICUSPIDA AORTICĂ',
                 'TAVI ÎN SITUAȚII SPECIALE VIV, VIR, VIMAC',
             ]],
             ['time_label' => '12:45-13:30', 'title' => 'PAUZĂ DE MASĂ', 'order' => 4, 'items' => []],

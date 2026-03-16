@@ -20,6 +20,12 @@
 
 Cererea dumneavoastră este **în curs de analizare**. Veți fi contactat în curând cu confirmarea participării.
 
+<x-mail::button :url="$googleCalendarUrl" color="primary">
+Adaugă în Google Calendar
+</x-mail::button>
+
+> Alternativ, puteți folosi fișierul **.ics** atașat la acest email pentru a adăuga evenimentul în orice aplicație de calendar (Apple Calendar, Outlook etc.).
+
 ---
 
 @if($isNewAccount)

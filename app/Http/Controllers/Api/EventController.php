@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -82,6 +83,9 @@ class EventController extends Controller
             'image_big'        => 'nullable|string|max:255',
             'status'           => 'nullable|in:draft,published,cancelled',
             'max_participants' => 'nullable|integer',
+            'meta_title'       => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'schema_org'       => 'nullable|string',
         ]);
 
         $event->update($validated);
@@ -117,6 +121,46 @@ class EventController extends Controller
         $event->delete();
 
         return response()->json(['message' => 'Event deleted.']);
+    }
+
+    public function ics(string $slug): Response
+    {
+        $event = Event::where('slug', $slug)->where('status', 'published')->firstOrFail();
+
+        $date      = \Carbon\Carbon::parse($event->date);
+        $startTime = $event->time_start
+            ? str_replace(':', '', substr($event->time_start, 0, 5)) . '00'
+            : '090000';
+        $endTime   = $event->time_end
+            ? str_replace(':', '', substr($event->time_end, 0, 5)) . '00'
+            : $startTime;
+
+        $dtStart  = $date->format('Ymd') . 'T' . $startTime;
+        $dtEnd    = $date->format('Ymd') . 'T' . $endTime;
+        $location = implode(', ', array_filter([$event->location, $event->venue]));
+        $desc     = str_replace(["\r\n", "\n", "\r"], '\\n', $event->description ?? '');
+
+        $lines = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//Monza Ares Academy//RO',
+            'BEGIN:VEVENT',
+            'UID:event-' . $event->id . '@monza-ares.ro',
+            'DTSTART:' . $dtStart,
+            'DTEND:'   . $dtEnd,
+            'SUMMARY:' . $event->title,
+            $location ? 'LOCATION:' . $location : null,
+            $desc      ? 'DESCRIPTION:' . $desc  : null,
+            'END:VEVENT',
+            'END:VCALENDAR',
+        ];
+
+        $ics = implode("\r\n", array_filter($lines));
+
+        return response($ics, 200, [
+            'Content-Type'        => 'text/calendar; charset=utf-8',
+            'Content-Disposition' => 'inline; filename="' . $event->slug . '.ics"',
+        ]);
     }
 
     private function authorizeManager(Request $request): void
