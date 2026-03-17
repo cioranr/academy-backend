@@ -20,11 +20,17 @@
 
 Cererea dumneavoastră este **în curs de analizare**. Veți fi contactat în curând cu confirmarea participării.
 
+Adaugă evenimentul în calendarul tău:
+
 <x-mail::button :url="$googleCalendarUrl" color="primary">
-Adaugă în Google Calendar
+Google Calendar
 </x-mail::button>
 
-> Alternativ, puteți folosi fișierul **.ics** atașat la acest email pentru a adăuga evenimentul în orice aplicație de calendar (Apple Calendar, Outlook etc.).
+<x-mail::button :url="$outlookCalendarUrl" color="blue">
+Outlook / Office 365
+</x-mail::button>
+
+> **Apple Calendar / altă aplicație:** [Descarcă fișierul .ics]({{ $icsUrl }}) și deschide-l pentru a adăuga evenimentul.
 
 ---
 

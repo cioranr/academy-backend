@@ -21,6 +21,11 @@ class ResetPasswordNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Resetare parolă – Monza Ares Academy')
-            ->view('emails.reset-password', ['url' => $this->url]);
+            ->greeting('Salut,')
+            ->line('Am primit o solicitare de resetare a parolei contului tău **Monza Ares Academy**.')
+            ->line('Apasă pe butonul de mai jos pentru a alege o nouă parolă. Linkul este valabil **60 de minute**.')
+            ->action('Resetează parola', $this->url)
+            ->line('Dacă nu ai solicitat resetarea parolei, poți ignora acest email în siguranță — contul tău rămâne nemodificat.')
+            ->salutation('Cu stimă, Echipa Monza Ares Academy');
     }
 }

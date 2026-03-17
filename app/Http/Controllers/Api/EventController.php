@@ -15,7 +15,7 @@ class EventController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = Event::with(['speakers', 'sessions.items'])
-            ->when(! $request->user()?->isEventsManager(), fn ($q) => $q->where('status', 'published'))
+            ->when(! $request->user('sanctum')?->isEventsManager(), fn ($q) => $q->where('status', 'published'))
             ->orderBy('date');
 
         return response()->json($query->get());
@@ -28,7 +28,9 @@ class EventController extends Controller
             ->orWhere('id', is_numeric($slug) ? (int) $slug : null)
             ->firstOrFail();
 
-        return response()->json($event);
+        return response()->json(
+            $event->append(['google_calendar_url', 'outlook_calendar_url'])
+        );
     }
 
     public function store(Request $request): JsonResponse
@@ -125,18 +127,8 @@ class EventController extends Controller
 
     public function ics(string $slug): Response
     {
-        $event = Event::where('slug', $slug)->where('status', 'published')->firstOrFail();
-
-        $date      = \Carbon\Carbon::parse($event->date);
-        $startTime = $event->time_start
-            ? str_replace(':', '', substr($event->time_start, 0, 5)) . '00'
-            : '090000';
-        $endTime   = $event->time_end
-            ? str_replace(':', '', substr($event->time_end, 0, 5)) . '00'
-            : $startTime;
-
-        $dtStart  = $date->format('Ymd') . 'T' . $startTime;
-        $dtEnd    = $date->format('Ymd') . 'T' . $endTime;
+        $event    = Event::where('slug', $slug)->where('status', 'published')->firstOrFail();
+        $dt       = $event->calendarDateTimes();
         $location = implode(', ', array_filter([$event->location, $event->venue]));
         $desc     = str_replace(["\r\n", "\n", "\r"], '\\n', $event->description ?? '');
 
@@ -146,8 +138,8 @@ class EventController extends Controller
             'PRODID:-//Monza Ares Academy//RO',
             'BEGIN:VEVENT',
             'UID:event-' . $event->id . '@monza-ares.ro',
-            'DTSTART:' . $dtStart,
-            'DTEND:'   . $dtEnd,
+            'DTSTART:' . $dt['dtStart'],
+            'DTEND:'   . $dt['dtEnd'],
             'SUMMARY:' . $event->title,
             $location ? 'LOCATION:' . $location : null,
             $desc      ? 'DESCRIPTION:' . $desc  : null,
