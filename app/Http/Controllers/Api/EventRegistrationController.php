@@ -33,6 +33,7 @@ class EventRegistrationController extends Controller
             'phone'             => 'nullable|string|max:30',
             'specialty'         => 'nullable|string|max:100',
             'professional_grade'=> 'nullable|string|max:100',
+            'cuim'              => 'nullable|string|max:30',
             'message'           => 'nullable|string|max:1000',
         ]);
 
@@ -76,6 +77,7 @@ class EventRegistrationController extends Controller
                 'phone'             => $validated['phone'] ?? null,
                 'specialty'         => $validated['specialty'] ?? null,
                 'professional_grade'=> $validated['professional_grade'] ?? null,
+                'cuim'              => $validated['cuim'] ?? null,
                 'role'              => 'participant',
             ]);
         }

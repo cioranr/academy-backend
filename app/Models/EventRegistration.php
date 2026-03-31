@@ -9,7 +9,7 @@ class EventRegistration extends Model
 {
     protected $fillable = [
         'event_id', 'user_id', 'first_name', 'last_name', 'email',
-        'phone', 'specialty', 'professional_grade', 'message', 'status', 'registered_at',
+        'phone', 'specialty', 'professional_grade', 'cuim', 'message', 'status', 'registered_at',
     ];
 
     protected $casts = [

@@ -28,6 +28,7 @@ class AuthController extends Controller
             'phone'             => 'nullable|string|max:30',
             'specialty'         => 'nullable|string|max:100',
             'professional_grade'=> 'nullable|string|max:100',
+            'cuim'              => 'nullable|string|max:30',
         ]);
 
         $user = User::create([
@@ -88,6 +89,7 @@ class AuthController extends Controller
             'phone'             => 'nullable|string|max:30',
             'specialty'         => 'nullable|string|max:100',
             'professional_grade'=> 'nullable|string|max:100',
+            'cuim'              => 'nullable|string|max:30',
         ]);
 
         $request->user()->update($validated);
