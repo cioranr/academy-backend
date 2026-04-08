@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ContactMessageController;
 use App\Http\Controllers\Api\DegreeController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\EventController;
@@ -18,6 +19,9 @@ Route::post('/reset-password',   [AuthController::class, 'resetPassword']);
 
 // ── Public testimonials ────────────────────────────────────────────────────────
 Route::get('/testimonials', [TestimonialController::class, 'index']);
+
+// ── Contact ───────────────────────────────────────────────────────────────────
+Route::post('/contact', [ContactMessageController::class, 'store'])->middleware('throttle:5,1');
 
 // ── Public events ─────────────────────────────────────────────────────────────
 Route::get('/events',            [EventController::class, 'index']);
@@ -71,6 +75,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/testimonials',                        [TestimonialController::class, 'store']);
     Route::patch('/testimonials/{testimonial}',         [TestimonialController::class, 'update']);
     Route::post('/testimonials/{testimonial}/image',    [TestimonialController::class, 'uploadImage']);
+    Route::post('/testimonials/{testimonial}/video',    [TestimonialController::class, 'uploadVideo']);
     Route::delete('/testimonials/{testimonial}',        [TestimonialController::class, 'destroy']);
 
     // Users
@@ -78,6 +83,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/{user}',          [UserController::class, 'show']);
     Route::patch('/users/{user}/role',   [UserController::class, 'updateRole']);
     Route::delete('/users/{user}',       [UserController::class, 'destroy']);
+
+    // Contact messages
+    Route::get('/contact',                              [ContactMessageController::class, 'index']);
+    Route::patch('/contact/{contactMessage}/read',      [ContactMessageController::class, 'markRead']);
+    Route::delete('/contact/{contactMessage}',          [ContactMessageController::class, 'destroy']);
 
     // Degrees
     Route::get('/users/{user}/degrees',       [DegreeController::class, 'index']);

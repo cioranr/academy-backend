@@ -71,6 +71,24 @@ class TestimonialController extends Controller
         return response()->json(['image' => $url]);
     }
 
+    public function uploadVideo(Request $request, Testimonial $testimonial): JsonResponse
+    {
+        $this->authorizeManager($request);
+
+        $request->validate(['video' => 'required|file|mimetypes:video/mp4,video/webm,video/ogg,video/quicktime|max:102400']);
+
+        if ($testimonial->video && str_starts_with($testimonial->video, '/storage/')) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $testimonial->video));
+        }
+
+        $path = $request->file('video')->store('testimonials/videos', 'public');
+        $url  = '/storage/' . $path;
+
+        $testimonial->update(['video' => $url]);
+
+        return response()->json(['video' => $url]);
+    }
+
     public function destroy(Request $request, Testimonial $testimonial): JsonResponse
     {
         $this->authorizeManager($request);
