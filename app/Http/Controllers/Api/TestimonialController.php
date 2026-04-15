@@ -26,6 +26,7 @@ class TestimonialController extends Controller
             'quote'          => 'required|string',
             'workshop_title' => 'nullable|string|max:255',
             'workshop_href'  => 'nullable|string|max:255',
+            'youtube_url'    => 'nullable|string|max:500',
             'active'         => 'nullable|boolean',
             'order'          => 'nullable|integer',
         ]);
@@ -44,6 +45,7 @@ class TestimonialController extends Controller
             'quote'          => 'sometimes|string',
             'workshop_title' => 'nullable|string|max:255',
             'workshop_href'  => 'nullable|string|max:255',
+            'youtube_url'    => 'nullable|string|max:500',
             'active'         => 'nullable|boolean',
             'order'          => 'nullable|integer',
         ]);
