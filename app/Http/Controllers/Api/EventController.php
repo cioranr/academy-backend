@@ -43,6 +43,7 @@ class EventController extends Controller
             'description'      => 'nullable|string',
             'slug'             => 'nullable|string|unique:events',
             'date'             => 'required|date',
+            'end_date'         => 'nullable|date|after_or_equal:date',
             'time_start'       => 'nullable|date_format:H:i,H:i:s',
             'time_end'         => 'nullable|date_format:H:i,H:i:s',
             'location'         => 'nullable|string|max:255',
@@ -54,6 +55,9 @@ class EventController extends Controller
             'image_big'        => 'nullable|string|max:255',
             'status'           => 'nullable|in:draft,published,cancelled',
             'max_participants' => 'nullable|integer',
+            'fully_booked_message'      => 'nullable|string',
+            'show_fully_booked_message' => 'nullable|boolean',
+            'cmr_address'      => 'nullable|string|max:255',
         ]);
 
         if (empty($validated['slug'])) {
@@ -73,7 +77,9 @@ class EventController extends Controller
             'title'            => 'sometimes|string|max:255',
             'subtitle'         => 'nullable|string|max:255',
             'description'      => 'nullable|string',
+            'slug'             => 'sometimes|string|max:255|unique:events,slug,' . $event->id,
             'date'             => 'sometimes|date',
+            'end_date'         => 'nullable|date|after_or_equal:date',
             'time_start'       => 'nullable|date_format:H:i,H:i:s',
             'time_end'         => 'nullable|date_format:H:i,H:i:s',
             'location'         => 'nullable|string|max:255',
@@ -88,6 +94,9 @@ class EventController extends Controller
             'meta_title'       => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'schema_org'       => 'nullable|string',
+            'fully_booked_message'      => 'nullable|string',
+            'show_fully_booked_message' => 'nullable|boolean',
+            'cmr_address'      => 'nullable|string|max:255',
         ]);
 
         $event->update($validated);

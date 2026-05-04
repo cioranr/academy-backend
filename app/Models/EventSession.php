@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EventSession extends Model
 {
-    protected $fillable = ['event_id', 'time_label', 'title', 'order'];
+    protected $fillable = ['event_id', 'time_label', 'title', 'order', 'day_index'];
 
     public function event(): BelongsTo
     {

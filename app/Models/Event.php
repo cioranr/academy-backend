@@ -11,15 +11,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Event extends Model
 {
     protected $fillable = [
-        'title', 'subtitle', 'description', 'slug', 'date',
+        'title', 'subtitle', 'description', 'slug', 'date', 'end_date',
         'time_start', 'time_end', 'location', 'venue',
         'credits', 'credits_label', 'image', 'image_small', 'image_big', 'status',
         'max_participants', 'created_by',
         'meta_title', 'meta_description', 'schema_org',
+        'fully_booked_message', 'show_fully_booked_message',
+        'cmr_address',
     ];
 
     protected $casts = [
         'date' => 'date',
+        'end_date' => 'date',
+        'show_fully_booked_message' => 'boolean',
     ];
 
     public function createdBy(): BelongsTo
@@ -29,7 +33,7 @@ class Event extends Model
 
     public function sessions(): HasMany
     {
-        return $this->hasMany(EventSession::class)->orderBy('order');
+        return $this->hasMany(EventSession::class)->orderBy('day_index')->orderBy('order');
     }
 
     public function speakers(): HasMany

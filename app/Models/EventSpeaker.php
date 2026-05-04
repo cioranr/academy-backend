@@ -18,4 +18,9 @@ class EventSpeaker extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function doctor(): BelongsTo
+    {
+        return $this->belongsTo(Doctor::class);
+    }
 }

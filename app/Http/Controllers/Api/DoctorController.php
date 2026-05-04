@@ -63,6 +63,24 @@ class DoctorController extends Controller
         return response()->json(['image' => $url]);
     }
 
+    public function uploadSignature(Request $request, Doctor $doctor): JsonResponse
+    {
+        $this->authorize($request);
+
+        $request->validate(['signature' => 'required|file|image|max:5120']);
+
+        if ($doctor->signature && str_starts_with($doctor->signature, '/storage/')) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $doctor->signature));
+        }
+
+        $path = $request->file('signature')->store('signatures', 'public');
+        $url  = '/storage/' . $path;
+
+        $doctor->update(['signature' => $url]);
+
+        return response()->json(['signature' => $url]);
+    }
+
     public function destroy(Request $request, Doctor $doctor): JsonResponse
     {
         $this->authorize($request);

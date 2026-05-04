@@ -10,14 +10,14 @@ use Illuminate\Http\Request;
 class EventSessionController extends Controller {
     public function store(Request $request, Event $event): JsonResponse {
         if (!$request->user()?->isEventsManager()) abort(403);
-        $validated = $request->validate(['time_label' => 'required|string', 'title' => 'required|string', 'order' => 'nullable|integer']);
+        $validated = $request->validate(['time_label' => 'required|string', 'title' => 'required|string', 'order' => 'nullable|integer', 'day_index' => 'nullable|integer|min:0']);
         $session = $event->sessions()->create($validated);
         return response()->json($session->load('items'), 201);
     }
 
     public function update(Request $request, EventSession $session): JsonResponse {
         if (!$request->user()?->isEventsManager()) abort(403);
-        $session->update($request->validate(['time_label' => 'sometimes|string', 'title' => 'sometimes|string', 'order' => 'nullable|integer']));
+        $session->update($request->validate(['time_label' => 'sometimes|string', 'title' => 'sometimes|string', 'order' => 'nullable|integer', 'day_index' => 'nullable|integer|min:0']));
         return response()->json($session->fresh('items'));
     }
 

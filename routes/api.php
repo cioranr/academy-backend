@@ -2,6 +2,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContactMessageController;
 use App\Http\Controllers\Api\DegreeController;
+use App\Http\Controllers\Api\DiplomaController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\EventRegistrationController;
@@ -58,11 +59,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/speakers/{speaker}/image',     [EventSpeakerController::class, 'uploadImage']);
     Route::delete('/speakers/{speaker}',         [EventSpeakerController::class, 'destroy']);
 
+    // Diplomas
+    Route::post('/registrations/{registration}/generate-diploma', [DiplomaController::class, 'generate']);
+
     // Doctors pool
     Route::get('/doctors',                   [DoctorController::class, 'index']);
     Route::post('/doctors',                  [DoctorController::class, 'store']);
     Route::patch('/doctors/{doctor}',        [DoctorController::class, 'update']);
-    Route::post('/doctors/{doctor}/image',   [DoctorController::class, 'uploadImage']);
+    Route::post('/doctors/{doctor}/image',     [DoctorController::class, 'uploadImage']);
+    Route::post('/doctors/{doctor}/signature', [DoctorController::class, 'uploadSignature']);
     Route::delete('/doctors/{doctor}',       [DoctorController::class, 'destroy']);
 
     // Registrations management
