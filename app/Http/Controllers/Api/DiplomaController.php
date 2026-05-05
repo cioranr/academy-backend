@@ -36,7 +36,8 @@ class DiplomaController extends Controller
         }
 
         $doctorName = trim($registration->first_name . ' ' . $registration->last_name);
-        $location   = trim(implode(', ', array_filter([$event->location, $event->venue])));
+        // $location   = trim(implode(', ', array_filter([$event->location, $event->venue])));
+        $location   = trim($event->venue);
 
         $start = Carbon::parse($event->date)->locale('ro');
         $end   = $event->end_date ? Carbon::parse($event->end_date)->locale('ro') : null;
