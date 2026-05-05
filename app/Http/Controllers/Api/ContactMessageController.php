@@ -24,7 +24,7 @@ class ContactMessageController extends Controller
         $contact = ContactMessage::create($validated);
 
         try {
-            Mail::to('radu@elevateweb.ro')->send(new ContactMessageNotification($contact));
+            Mail::to('marketing@monza-ares.ro')->send(new ContactMessageNotification($contact));
         } catch (\Throwable) {
             // Don't fail the submission if email sending fails
         }
