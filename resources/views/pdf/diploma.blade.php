@@ -28,7 +28,7 @@
   .pad-mid    { vertical-align: middle; padding: 0 22mm !important; }
   .pad-bottom { height: 1%; padding: 0 22mm 12mm 22mm !important; vertical-align: bottom; }
 
-  .logo-wrap { text-align: right; }
+  .logo-wrap { text-align: {{$logo_align}}; }
   .logo-wrap img { width: 40mm; }
 
   .title {

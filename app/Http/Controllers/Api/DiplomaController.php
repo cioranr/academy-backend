@@ -50,6 +50,7 @@ class DiplomaController extends Controller
         }
 
         $logoFile  = $event->credits ? 'logos/amici_logo.png' : 'logos/logo.png';
+        $logoAlign = $event->credits ? 'right' : 'left';
         $logoPath  = Storage::disk('public')->exists($logoFile)
             ? storage_path('app/public/' . $logoFile)
             : null;
@@ -84,6 +85,7 @@ class DiplomaController extends Controller
             'credits'        => $event->credits,
             'cmr_address'    => $event->cmr_address,
             'logo_path'      => $logoPath,
+            'logo_align'     => $logoAlign,
             'signers'        => $signers,
             'font_faces'     => $faces,
         ])->setPaper('a4', 'landscape')
