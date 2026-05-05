@@ -16,7 +16,7 @@ class EventController extends Controller
     {
         $query = Event::with(['speakers', 'sessions.items'])
             ->when(! $request->user('sanctum')?->isEventsManager(), fn ($q) => $q->where('status', 'published'))
-            ->orderBy('date');
+            ->orderBy('date','DESC');
 
         return response()->json($query->get());
     }
