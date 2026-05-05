@@ -3,6 +3,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContactMessageController;
 use App\Http\Controllers\Api\DegreeController;
 use App\Http\Controllers\Api\DiplomaController;
+use App\Http\Controllers\Api\VideoResourceController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\EventRegistrationController;
@@ -23,6 +24,9 @@ Route::get('/testimonials', [TestimonialController::class, 'index']);
 
 // ── Contact ───────────────────────────────────────────────────────────────────
 Route::post('/contact', [ContactMessageController::class, 'store'])->middleware('throttle:5,1');
+
+// ── Public video resources (slug-only access; not listed anywhere) ───────────
+Route::get('/video-resources/{slug}', [VideoResourceController::class, 'show']);
 
 // ── Public events ─────────────────────────────────────────────────────────────
 Route::get('/events',            [EventController::class, 'index']);
@@ -61,6 +65,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Diplomas
     Route::post('/registrations/{registration}/generate-diploma', [DiplomaController::class, 'generate']);
+
+    // Video resources (admin)
+    Route::get('/video-resources',                       [VideoResourceController::class, 'index']);
+    Route::post('/video-resources',                      [VideoResourceController::class, 'store']);
+    Route::patch('/video-resources/{videoResource}',     [VideoResourceController::class, 'update']);
+    Route::post('/video-resources/{videoResource}/video',[VideoResourceController::class, 'uploadVideo']);
+    Route::delete('/video-resources/{videoResource}',    [VideoResourceController::class, 'destroy']);
 
     // Doctors pool
     Route::get('/doctors',                   [DoctorController::class, 'index']);
