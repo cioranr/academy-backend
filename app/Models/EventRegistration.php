@@ -10,10 +10,16 @@ class EventRegistration extends Model
     protected $fillable = [
         'event_id', 'user_id', 'first_name', 'last_name', 'email',
         'phone', 'specialty', 'professional_grade', 'cuim', 'message', 'status', 'registered_at',
+        'is_present', 'present_at', 'feedback_sent_at', 'feedback_token', 'feedback_completed', 'diploma_sent',
     ];
 
     protected $casts = [
-        'registered_at' => 'datetime',
+        'registered_at'    => 'datetime',
+        'present_at'       => 'datetime',
+        'feedback_sent_at' => 'datetime',
+        'is_present'       => 'boolean',
+        'feedback_completed' => 'boolean',
+        'diploma_sent'     => 'boolean',
     ];
 
     public function event(): BelongsTo
@@ -24,5 +30,10 @@ class EventRegistration extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function feedbackResponse(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(FeedbackResponse::class, 'registration_id');
     }
 }

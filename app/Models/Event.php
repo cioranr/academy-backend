@@ -18,12 +18,14 @@ class Event extends Model
         'meta_title', 'meta_description', 'schema_org',
         'fully_booked_message', 'show_fully_booked_message',
         'cmr_address',
+        'send_feedback', 'questionnaire_id',
     ];
 
     protected $casts = [
         'date' => 'date',
         'end_date' => 'date',
         'show_fully_booked_message' => 'boolean',
+        'send_feedback' => 'boolean',
     ];
 
     public function createdBy(): BelongsTo
@@ -49,6 +51,11 @@ class Event extends Model
     public function directors(): HasMany
     {
         return $this->hasMany(EventSpeaker::class)->where('speaker_role', 'director')->orderBy('order');
+    }
+
+    public function questionnaire(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Questionnaire::class);
     }
 
     /** Returns ['dtStart' => 'YYYYMMDDTHHmmss', 'dtEnd' => ..., 'isoStart' => ..., 'isoEnd' => ...] */

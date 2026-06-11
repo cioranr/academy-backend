@@ -3,6 +3,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContactMessageController;
 use App\Http\Controllers\Api\DegreeController;
 use App\Http\Controllers\Api\DiplomaController;
+use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Api\QuestionnaireController;
 use App\Http\Controllers\Api\VideoResourceController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\EventController;
@@ -33,6 +35,10 @@ Route::get('/events',            [EventController::class, 'index']);
 Route::get('/events/{slug}',     [EventController::class, 'show']);
 Route::get('/events/{slug}/ics', [EventController::class, 'ics']);
 Route::post('/events/{slug}/register', [EventRegistrationController::class, 'store'])->middleware('throttle:10,1');
+
+// ── Public feedback form ──────────────────────────────────────────────────────
+Route::get('/feedback/{token}',  [FeedbackController::class, 'showForm']);
+Route::post('/feedback/{token}', [FeedbackController::class, 'submitForm']);
 
 // ── Authenticated ─────────────────────────────────────────────────────────────
 Route::middleware('auth:sanctum')->group(function () {
@@ -65,6 +71,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Diplomas
     Route::post('/registrations/{registration}/generate-diploma', [DiplomaController::class, 'generate']);
+
+    // Presence & Feedback
+    Route::post('/registrations/{registration}/mark-present', [FeedbackController::class, 'markPresent']);
+    Route::get('/events/{eventId}/feedback-stats',            [FeedbackController::class, 'eventStats']);
+    Route::get('/events/{eventId}/feedback-export',           [FeedbackController::class, 'exportFeedback']);
+
+    // Questionnaires
+    Route::get('/questionnaires',                       [QuestionnaireController::class, 'index']);
+    Route::post('/questionnaires',                      [QuestionnaireController::class, 'store']);
+    Route::get('/questionnaires/{questionnaire}',       [QuestionnaireController::class, 'show']);
+    Route::patch('/questionnaires/{questionnaire}',     [QuestionnaireController::class, 'update']);
+    Route::delete('/questionnaires/{questionnaire}',    [QuestionnaireController::class, 'destroy']);
 
     // Video resources (admin)
     Route::get('/video-resources',                       [VideoResourceController::class, 'index']);

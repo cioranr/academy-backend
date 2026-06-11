@@ -58,6 +58,8 @@ class EventController extends Controller
             'fully_booked_message'      => 'nullable|string',
             'show_fully_booked_message' => 'nullable|boolean',
             'cmr_address'      => 'nullable|string|max:255',
+            'send_feedback'    => 'nullable|boolean',
+            'questionnaire_id' => 'nullable|integer|exists:questionnaires,id',
         ]);
 
         if (empty($validated['slug'])) {
@@ -97,6 +99,8 @@ class EventController extends Controller
             'fully_booked_message'      => 'nullable|string',
             'show_fully_booked_message' => 'nullable|boolean',
             'cmr_address'      => 'nullable|string|max:255',
+            'send_feedback'    => 'nullable|boolean',
+            'questionnaire_id' => 'nullable|integer|exists:questionnaires,id',
         ]);
 
         $event->update($validated);
