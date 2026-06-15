@@ -246,6 +246,14 @@ img {
     border-top: 8px solid #18181b;
 }
 
+.button-monza {
+    background-color: #065EA5;
+    border-bottom: 8px solid #065EA5;
+    border-left: 18px solid #065EA5;
+    border-right: 18px solid #065EA5;
+    border-top: 8px solid #065EA5;
+}
+
 .button-green,
 .button-success {
     background-color: #16a34a;

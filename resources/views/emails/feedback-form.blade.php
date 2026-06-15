@@ -7,7 +7,7 @@ Vă rugăm să completați formularul de feedback pentru a ne ajuta să îmbună
 
 **Completând formularul, veți primi automat diploma de participare.**
 
-<x-mail::button :url="$feedbackUrl" color="primary">
+<x-mail::button :url="$feedbackUrl" color="monza">
 Completează formularul de feedback
 </x-mail::button>
 
