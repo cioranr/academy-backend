@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\DiplomaMail;
-use App\Mail\FeedbackFormMail;
 use App\Models\Degree;
 use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\FeedbackResponse;
+use App\Services\PresenceService;
 use App\Support\DiplomaFonts;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -17,48 +17,37 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class FeedbackController extends Controller
 {
     /**
-     * Mark a registration as present and optionally send feedback email.
+     * Mark a registration as present (manual, by a manager) and optionally send feedback email.
      */
-    public function markPresent(Request $request, EventRegistration $registration): JsonResponse
+    public function markPresent(Request $request, EventRegistration $registration, PresenceService $presence): JsonResponse
     {
         if (! $request->user()?->isEventsManager()) {
             abort(403);
         }
 
-        // Already marked — return current state without resending
-        if ($registration->is_present) {
-            return response()->json($registration->fresh());
+        return response()->json($presence->confirm($registration, PresenceService::METHOD_MANUAL, $request->user()));
+    }
+
+    /**
+     * Admin correction: set or revoke presence explicitly.
+     */
+    public function updatePresence(Request $request, EventRegistration $registration, PresenceService $presence): JsonResponse
+    {
+        if (! $request->user()?->isEventsManager()) {
+            abort(403);
         }
 
-        $registration->update([
-            'is_present' => true,
-            'present_at' => now(),
-        ]);
+        $validated = $request->validate(['is_present' => 'required|boolean']);
 
-        $event = $registration->event()->with('questionnaire')->first();
+        $registration = $validated['is_present']
+            ? $presence->confirm($registration, PresenceService::METHOD_MANUAL, $request->user())
+            : $presence->revoke($registration);
 
-        // Send feedback form email if the event has feedback configured
-        if ($event->send_feedback && $event->questionnaire && $registration->user_id) {
-            $token = Str::uuid()->toString();
-
-            $registration->update([
-                'feedback_token'   => $token,
-                'feedback_sent_at' => now(),
-            ]);
-
-            try {
-                Mail::to($registration->email)->send(new FeedbackFormMail($registration->fresh(), $event));
-            } catch (\Throwable) {
-                // Don't fail if email sending fails
-            }
-        }
-
-        return response()->json($registration->fresh());
+        return response()->json($registration);
     }
 
     /**
@@ -182,6 +171,7 @@ class FeedbackController extends Controller
                 'email'              => $r->email,
                 'is_present'         => $r->is_present,
                 'present_at'         => $r->present_at,
+                'presence_method'    => $r->presence_method,
                 'feedback_sent_at'   => $r->feedback_sent_at,
                 'feedback_completed' => $r->feedback_completed,
                 'diploma_sent'       => $r->diploma_sent,

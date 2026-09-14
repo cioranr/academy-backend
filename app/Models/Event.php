@@ -26,7 +26,21 @@ class Event extends Model
         'end_date' => 'date',
         'show_fully_booked_message' => 'boolean',
         'send_feedback' => 'boolean',
+        'checkin_token_generated_at' => 'datetime',
     ];
+
+    /** The check-in token is only exposed through the admin QR endpoint. */
+    protected $hidden = ['checkin_token'];
+
+    /** Absolute frontend URL encoded in the check-in QR code. */
+    public function checkinUrl(): ?string
+    {
+        if (! $this->checkin_token) {
+            return null;
+        }
+
+        return rtrim(config('app.frontend_url'), '/') . '/checkin/' . $this->checkin_token;
+    }
 
     public function createdBy(): BelongsTo
     {

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\QuestionnaireController;
 use App\Http\Controllers\Api\VideoResourceController;
 use App\Http\Controllers\Api\DoctorController;
+use App\Http\Controllers\Api\EventCheckinController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\EventRegistrationController;
 use App\Http\Controllers\Api\EventSessionController;
@@ -72,8 +73,16 @@ Route::middleware('auth:sanctum')->group(function () {
     // Diplomas
     Route::post('/registrations/{registration}/generate-diploma', [DiplomaController::class, 'generate']);
 
+    // QR check-in (participant)
+    Route::post('/checkin/{token}', [EventCheckinController::class, 'checkin'])->middleware('throttle:20,1');
+
+    // QR check-in (admin)
+    Route::get('/events/{event}/checkin-qr',  [EventCheckinController::class, 'show']);
+    Route::post('/events/{event}/checkin-qr', [EventCheckinController::class, 'generate']);
+
     // Presence & Feedback
     Route::post('/registrations/{registration}/mark-present', [FeedbackController::class, 'markPresent']);
+    Route::patch('/registrations/{registration}/presence',    [FeedbackController::class, 'updatePresence']);
     Route::get('/events/{eventId}/feedback-stats',            [FeedbackController::class, 'eventStats']);
     Route::get('/events/{eventId}/feedback-export',           [FeedbackController::class, 'exportFeedback']);
 
