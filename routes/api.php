@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\EventRegistrationController;
 use App\Http\Controllers\Api\EventSessionController;
 use App\Http\Controllers\Api\EventSpeakerController;
+use App\Http\Controllers\Api\SpecialtyController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,9 @@ Route::post('/reset-password',   [AuthController::class, 'resetPassword']);
 
 // ── Public testimonials ────────────────────────────────────────────────────────
 Route::get('/testimonials', [TestimonialController::class, 'index']);
+
+// ── Public specialties ────────────────────────────────────────────────────────
+Route::get('/specialties', [SpecialtyController::class, 'index']);
 
 // ── Contact ───────────────────────────────────────────────────────────────────
 Route::post('/contact', [ContactMessageController::class, 'store'])->middleware('throttle:5,1');
@@ -120,6 +124,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/testimonials/{testimonial}/image',    [TestimonialController::class, 'uploadImage']);
     Route::post('/testimonials/{testimonial}/video',    [TestimonialController::class, 'uploadVideo']);
     Route::delete('/testimonials/{testimonial}',        [TestimonialController::class, 'destroy']);
+
+    // Specialties
+    Route::post('/specialties',                 [SpecialtyController::class, 'store']);
+    Route::patch('/specialties/{specialty}',    [SpecialtyController::class, 'update']);
+    Route::delete('/specialties/{specialty}',   [SpecialtyController::class, 'destroy']);
 
     // Users
     Route::get('/users',                 [UserController::class, 'index']);
